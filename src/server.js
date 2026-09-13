@@ -9,11 +9,13 @@ dns.setServers([
 
 const PORT = process.env.PORT || 5000;
 
+const connectDB = require("./config/connectDB");
+
 const app = require("./app");
 
 const startServer = async () => {
     try {
-        // await connectDB();
+        await connectDB();
 
         app.on("error", (error) => {
             console.log("ERROR", error);
