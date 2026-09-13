@@ -1,22 +1,20 @@
 const multer = require("multer");
 
-
 const errorHandler = (err, req, res, next) => {
-    console.error(err.message);
-    console.error(err.stack || '');
-    const status = err.status || 500;
+  console.error("DEBUG ERROR:", err); // Logs full trace to your terminal
 
-    if( err instanceof multer.MulterError ){
-        res.status(400).json(`Invalid file type of too large file`);
+  if (err instanceof multer.MulterError) {
+    if (err.code === "LIMIT_FILE_SIZE") {
+      return res.status(400).json({ message: "File size exceeds strict 3MB max size limit." });
     }
+    return res.status(400).json({ message: err.message });
+  }
 
-    res.status(status).json({
-        error: err.message
-    });
-
-    next();
-    
-}
-
+  const statusCode = res.statusCode && res.statusCode !== 200 ? res.statusCode : 500;
+  return res.status(statusCode).json({
+    message: err.message || "Internal Server Error",
+    error: process.env.NODE_ENV === "production" ? {} : err
+  });
+};
 
 module.exports = errorHandler;

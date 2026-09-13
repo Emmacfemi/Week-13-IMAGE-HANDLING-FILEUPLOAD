@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -17,7 +19,7 @@ app.use(cors());
 app.use(logHandler);
 
 app.use("/api/user", userRoutes);
-app.use("/api", articleRoutes);
+app.use("/api/articles", articleRoutes);
 
 // Global Error Middleware handles Multer errors
 app.use(errorHandler);

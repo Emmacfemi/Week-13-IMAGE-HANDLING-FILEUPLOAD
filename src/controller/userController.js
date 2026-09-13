@@ -109,7 +109,7 @@ const uploadAvatarController = async (req, res, next) => {
     }
 
     // req.user comes from your authentication middleware
-    const userId = req.user._id || req.user.userId;
+    const userId = req.userid || req.user.user._Id;
 
     const updatedUser = await User.findByIdAndUpdate(
       userId,
